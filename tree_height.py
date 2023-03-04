@@ -4,7 +4,7 @@ import sys
 import threading
 import numpy as np
 
-
+#pārbaudeGithubam
 def compute_height(n, parents):
     # Write this function
     def _compute_height(node):
