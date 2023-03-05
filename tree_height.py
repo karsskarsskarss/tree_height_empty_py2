@@ -1,38 +1,37 @@
-import numpy as np
+import sys
+import threading
+import numpy
 
-def tree_height(n, parents):
-    # Convert the parent array to a matrix for easier indexing
-    matrix = np.zeros((n, n), dtype=bool)
-    for i, p in enumerate(parents):
-        if p >= 0:
-            matrix[p][i] = True
+def compute_height(n, parents):
+    # Write this function
+    max_height = 0
+    for x in range(n):
+        dzilums = 0
+        id = x
+        while id != -1:
+            dzilums = dzilums + 1
+            id = parents[id]
+        max_height = max(max_height, dzilums)
 
-    # Find the depth of each node by counting the number of ancestors
-    depths = np.zeros(n, dtype=int)
-    for i in range(n):
-        j = i
-        while j >= 0:
-            depths[i] += 1
-            j = parents[j]
-
-    # The height of the tree is the maximum depth
-    return np.max(depths)
+    return max_height
 
 def main():
-    # Read input data
-    try:
-        n = int(input())
-        parents = list(map(int, input().split()))
-        assert len(parents) == n
-    except ValueError:
-        print("Invalid input: please enter integers only.")
-        return
-    except AssertionError:
-        print("Invalid input: the number of nodes doesn't match the length of the parent array.")
-        return
+    text = str(input())
+    if "I" in text:
+        skaits = int(input())
+        dati = list(map(int, input().split()))
+        print(compute_height(skaits, dati))
 
-    # Calculate tree height and print result
-    print(tree_height(n, parents))
+    if "F" in text:
+        name = str(input())
+        name = "test/" + str(name)
+        file = open(name,'r')
+        skaits = int(file.readline())
+        dati = list(map(int, file.readline().split()))
+        file.close()
+        print(compute_height(skaits, dati))
 
-if __name__ == '__main__':
-    main()
+
+sys.setrecursionlimit(10**7)
+threading.stack_size(2**27)
+threading.Thread(target=main).start()
