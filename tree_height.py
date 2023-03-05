@@ -1,50 +1,38 @@
-# python3
-
-import sys
-import threading
 import numpy as np
 
-#pārbaudeGithubam
-def compute_height(n, parents):
-    # Write this function
-    def _compute_height(node):
-        if node in cache:
-            return cache[node]
-        elif parents[node] == -1:
-            cache[node] = 1
-        else:
-            cache[node] = 1 + _compute_height(parents[node])
-        return cache[node]
-    max_height = 0
-    # Your code here
-    cache = {}
-    for node in range(n):
-        height = _compute_height(node)
-        if height > max_height:
-            max_height = height
-    return max_height
+def tree_height(n, parents):
+    # Convert the parent array to a matrix for easier indexing
+    matrix = np.zeros((n, n), dtype=bool)
+    for i, p in enumerate(parents):
+        if p >= 0:
+            matrix[p][i] = True
 
+    # Find the depth of each node by counting the number of ancestors
+    depths = np.zeros(n, dtype=int)
+    for i in range(n):
+        j = i
+        while j >= 0:
+            depths[i] += 1
+            j = parents[j]
+
+    # The height of the tree is the maximum depth
+    return np.max(depths)
 
 def main():
-    n = int(np.array(input().split(), dtype=int)[0])
-    parents = np.array(input().split(), dtype=int)
-    # implement input form keyboard and from files
-    
-    # let user input file name to use, don't allow file names with letter a
-    # account for github input inprecision
-    
-    # input number of elements
-    max_height = compute_height(n, parents)
-    # input values in one variable, separate with space, split these values in an array
-    # call the function and output it's result
-    print(max_height)
-    #pass
+    # Read input data
+    try:
+        n = int(input())
+        parents = list(map(int, input().split()))
+        assert len(parents) == n
+    except ValueError:
+        print("Invalid input: please enter integers only.")
+        return
+    except AssertionError:
+        print("Invalid input: the number of nodes doesn't match the length of the parent array.")
+        return
 
-# In Python, the default limit on recursion depth is rather low,
-# so raise it here for this problem. Note that to take advantage
-# of bigger stack, we have to launch the computation in a new thread.
-sys.setrecursionlimit(10**7)  # max depth of recursion
-threading.stack_size(2**27)   # new thread will get stack of such size
-threading.Thread(target=main).start()
-# main()
-# print(numpy.array([1,2,3]))
+    # Calculate tree height and print result
+    print(tree_height(n, parents))
+
+if __name__ == '__main__':
+    main()
