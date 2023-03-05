@@ -14,7 +14,7 @@ def compute_height(n, parents):
             id = parents[id]
        max_height = max(max_height, height)
     return max_height
-
+#man ir mamma
 def main():
     n = int(input())
     parents = list(map(int, input().split()))
@@ -27,4 +27,3 @@ threading.stack_size(2**27)
 threading.Thread(target=main).start()
 #kapec neredzu testus?
 #test check
-
